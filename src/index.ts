@@ -24,23 +24,36 @@ email,
 password
 */
 
-let users = [];
+type User = {
+    id: string;
+    name: string;
+    email:string;
+    password: string;
+}
+
+let users: User[] = [];
+
+let users2: User = {} as User;
+
+//server.get('/', (request, response)=>{
+    //return response.send('Olá mundo!')
+//})
 
 //Listagem
 server.get('/users', (request, response)=>{
-    response.send(users)
+    return response.send(users)
 });
 
 //Pesquisa
 server.get('/users/:id', (request, response)=>{
     const { id } = request.params;
     const user = users.find(x => x.id === id);
-    response.send(user)
+    return response.send(user)
 });
 
 //Cadastro de Usuário
 server.post('/users', (request, response)=>{
-    const {name, email, password} = request.body;
+    const {name, email, password} = request.body as User;
 
     const id = v4();
 
@@ -53,7 +66,7 @@ server.post('/users', (request, response)=>{
 
     users.push(user);
 
-    response.send(user);
+    return response.send(user);
 });
 
 //Edição
@@ -62,7 +75,7 @@ server.put('/users/:id', (request, response)=>{
     //alterar as informaçãoes
     //salvar o usuario
     const { id } = request.params;
-    const {name, email, password} = request.body;
+    const {name, email, password} = request.body as User;
 
     const userIndex = users.findIndex(x => x.id === id);
     const user = {
@@ -74,14 +87,14 @@ server.put('/users/:id', (request, response)=>{
 
     users[userIndex] = user;
 
-    response.send(user);
+    return response.send(user);
 });
 
 //remoção ou deletar
 server.delete('/users/:id', (request, response)=>{
     const { id } = request.params;
     users = users.filter(x => x.id !== id);
-    response.send({}); 
+    return response.send({}); 
 });
 
 //remoção ou deletar
